@@ -3,7 +3,7 @@ defmodule Queuex.Mixfile do
 
   def project do
     [ app: :queuex,
-      version: "0.1.0-dev",
+      version: "0.1.0",
       elixir: "~> 1.0",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
