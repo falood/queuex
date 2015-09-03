@@ -1,0 +1,7 @@
+language: elixir
+elixir: 1.0.0
+notifications:
+  recipients:
+    - self@falood.me
+before_script:
+  - mix deps.get --only test
