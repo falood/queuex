@@ -47,4 +47,17 @@ defmodule Queuex.Backends.RedBlackTreeTest do
     assert false == queue |> Q.has_priority_value?(1, :b)
   end
 
+
+  test "order" do
+    queue =
+      [ {1, :a}, {2, :b}, {2, :c}, {2, :d}, {3, :e}, {2, :f}, {2, :g}
+      ] |> Enum.reduce Q.new, fn({p, v}, acc) -> acc |> Q.push(p, v) end
+    {{1, :a}, queue} = queue |> Q.pop
+    {{2, :b}, queue} = queue |> Q.pop
+    {{2, :c}, queue} = queue |> Q.pop
+    {{2, :d}, queue} = queue |> Q.pop
+    {{2, :f}, queue} = queue |> Q.pop
+    {{2, :g}, queue} = queue |> Q.pop
+    {{3, :e}, %Q{size: 0, root: nil}} = queue |> Q.pop
+  end
 end

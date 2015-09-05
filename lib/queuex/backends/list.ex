@@ -16,7 +16,7 @@ defmodule Queuex.Backends.List do
   """
   def push([], priority, value), do: [{priority, value}]
   def push([{list_priority, _}=h | t], priority, value) do
-    if priority <= list_priority do
+    if priority < list_priority do
       [{priority, value}, h | t]
     else
       [h | push(t, priority, value)]

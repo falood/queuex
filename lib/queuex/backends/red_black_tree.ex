@@ -142,7 +142,7 @@ defmodule Queuex.Backends.RedBlackTree do
   end
 
   defp do_insert(%Node{priority: node_priority}=node, insert_priority, insert_value, depth) do
-    if insert_priority <= node_priority do
+    if insert_priority < node_priority do
       do_insert_left(node, insert_priority, insert_value, depth)
     else
       do_insert_right(node, insert_priority, insert_value, depth)
