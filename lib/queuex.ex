@@ -1,17 +1,17 @@
 defmodule Queuex do
   defmacro __using__(opts) do
-    max_num = opts |> Keyword.fetch! :max_num
-    worker = opts |> Keyword.fetch! :worker
-    backend = opts |> Keyword.get :backend, Queuex.Backends.List
-    unique = opts |> Keyword.get :unique, false
-    default_priority = opts |> Keyword.get :default_priority, 1
+    max_num          = opts |> Keyword.fetch!(:max_num)
+    worker           = opts |> Keyword.fetch!(:worker)
+    backend          = opts |> Keyword.get(:backend, Queuex.Backends.List)
+    unique           = opts |> Keyword.get(:unique, false)
+    default_priority = opts |> Keyword.get(:default_priority, 1)
     quote do
-      @max_num unquote(max_num)
-      @worker unquote(worker)
-      @unique unquote(unique)
-      @backend unquote(backend)
+      @max_num          unquote(max_num)
+      @worker           unquote(worker)
+      @unique           unquote(unique)
+      @backend          unquote(backend)
       @default_priority unquote(default_priority)
-      @before_compile unquote(__MODULE__)
+      @before_compile   unquote(__MODULE__)
     end
   end
 
@@ -27,15 +27,15 @@ defmodule Queuex do
       end
 
       def push(term) do
-        GenServer.cast __MODULE__, {@default_priority, term}
+        GenServer.cast(__MODULE__, {@default_priority, term})
       end
 
       def push(priority, term) do
-        GenServer.cast __MODULE__, {priority, term}
+        GenServer.cast(__MODULE__, {priority, term})
       end
 
       def status do
-        GenServer.call __MODULE__, :status
+        GenServer.call(__MODULE__, :status)
       end
     end
   end

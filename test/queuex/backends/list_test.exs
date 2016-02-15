@@ -50,7 +50,7 @@ defmodule Queuex.Backends.ListTest do
   test "order" do
     queue =
       [ {1, :a}, {2, :b}, {2, :c}, {2, :d}, {3, :e}, {2, :f}, {2, :g}
-      ] |> Enum.reduce Q.new, fn({p, v}, acc) -> acc |> Q.push(p, v) end
+      ] |> Enum.reduce(Q.new, fn({p, v}, acc) -> acc |> Q.push(p, v) end)
     {{1, :a}, queue} = queue |> Q.pop
     {{2, :b}, queue} = queue |> Q.pop
     {{2, :c}, queue} = queue |> Q.pop

@@ -7,6 +7,6 @@ defmodule Queuex.Supervisor do
 
   def init([module]) do
     [ worker(module, [], [restart: :temporary])
-    ] |> supervise [strategy: :simple_one_for_one]
+    ] |> supervise(strategy: :simple_one_for_one)
   end
 end

@@ -40,7 +40,7 @@ defmodule Queuex.Worker do
   end
 
   def handle_cast({_priority, term}, %__MODULE__{num: num}=sd) do
-    {sd.pid, sd.module} |> new_worker |> send term
+    {sd.pid, sd.module} |> new_worker |> send(term)
     {:noreply, %{sd | num: num + 1}}
   end
 
@@ -72,12 +72,12 @@ defmodule Queuex.Worker do
   # result is :normal | {error, stack}
   def handle_info({:DOWN, ref, :process, _pid, _result}, %__MODULE__{num: num}=sd) do
     Logger.info "Queuex #{sd.module}: Task completed."
-    ref |> Process.demonitor [:flush]
+    ref |> Process.demonitor([:flush])
     case sd.queue |> sd.backend.pop do
       {nil, queue} ->
         {:noreply, %{sd | num: num - 1, queue: queue}}
       {{_priority, term}, queue} ->
-        {sd.pid, sd.module} |> new_worker |> send term
+        {sd.pid, sd.module} |> new_worker |> send(term)
         {:noreply, %{sd | num: num, queue: queue}}
     end
   end
