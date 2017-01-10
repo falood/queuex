@@ -23,7 +23,7 @@ defmodule Queuex.Mixfile do
   end
 
   defp package do
-    %{ licenses: ["BSD 3-Clause"],
+    %{ licenses: ["WTFPL"],
        links: %{"Github" => "https://github.com/falood/queuex"}
      }
   end
