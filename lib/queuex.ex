@@ -27,11 +27,11 @@ defmodule Queuex do
       end
 
       def push(term) do
-        GenServer.cast(__MODULE__, {@default_priority, term})
+        GenServer.cast(__MODULE__, {term, @default_priority})
       end
 
-      def push(priority, term) do
-        GenServer.cast(__MODULE__, {priority, term})
+      def push(term, priority) do
+        GenServer.cast(__MODULE__, {term, priority})
       end
 
       def status do

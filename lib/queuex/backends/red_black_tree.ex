@@ -42,11 +42,11 @@ defmodule Queuex.Backends.RedBlackTree do
   @doc """
   O(log2(n))
   """
-  def push(%RedBlackTree{root: nil}=tree, priority, value) do
+  def push(%RedBlackTree{root: nil}=tree, value, priority) do
     %RedBlackTree{tree | root: Node.new(priority, value), size: 1}
   end
 
-  def push(%RedBlackTree{root: root, size: size}=tree, priority, value) do
+  def push(%RedBlackTree{root: root, size: size}=tree, value, priority) do
     {nodes_added, new_root} = do_insert(root, priority, value, 1)
     %RedBlackTree{
       tree |
@@ -86,16 +86,16 @@ defmodule Queuex.Backends.RedBlackTree do
   @doc """
   O(n)
   """
-  def has_priority_value?(%RedBlackTree{root: root}, priority, value) do
-    do_has_priority_value?(root, priority, value)
+  def has_priority_value?(%RedBlackTree{root: root}, value, priority) do
+    do_has_priority_value?(root, value, priority)
   end
 
-  defp do_has_priority_value?(nil, _priority, _value), do: false
-  defp do_has_priority_value?(%Node{left: left, right: right, priority: node_priority, value: node_value}, priority, value) do
+  defp do_has_priority_value?(nil, _value, _priority), do: false
+  defp do_has_priority_value?(%Node{left: left, right: right, priority: node_priority, value: node_value}, value, priority) do
     node_priority === priority
     && node_value === value
-    || do_has_priority_value?(left, priority, value)
-    || do_has_priority_value?(right, priority, value)
+    || do_has_priority_value?(left, value, priority)
+    || do_has_priority_value?(right, value, priority)
   end
 
   @doc """
@@ -114,7 +114,7 @@ defmodule Queuex.Backends.RedBlackTree do
 
   defp do_to_list(nil), do: []
   defp do_to_list(%Node{left: left, right: right, priority: priority, value: value}) do
-    do_to_list(left) ++ [{priority, value}] ++ do_to_list(right)
+    do_to_list(left) ++ [{value, priority}] ++ do_to_list(right)
   end
 
 
@@ -167,13 +167,13 @@ defmodule Queuex.Backends.RedBlackTree do
   end
 
   defp do_smallest(%Node{left: nil, priority: priority, value: value}=node) do
-    {{priority, value}, 1, do_delete_node(node)}
+    {{value, priority}, 1, do_delete_node(node)}
   end
 
   defp do_smallest(%Node{left: left}=node) do
-    {{priority, value}, 1, new_left} = do_smallest(left)
+    {{value, priority}, 1, new_left} = do_smallest(left)
     {
-      {priority, value},
+      {value, priority},
       1,
       %Node{
         node |

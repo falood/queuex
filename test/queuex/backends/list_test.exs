@@ -8,12 +8,12 @@ defmodule Queuex.Backends.ListTest do
   end
 
   test "push" do
-    queue = Q.new |> Q.push(1, :a)
-    assert [{1, :a}] == queue |> Q.to_list
+    queue = Q.new |> Q.push(:a, 1)
+    assert [{:a, 1}] == queue |> Q.to_list
     assert 1 == queue |> Q.size
 
-    queue = queue |> Q.push(0, :c)
-    assert [{0, :c}, {1, :a}] == queue |> Q.to_list
+    queue = queue |> Q.push(:c, 0)
+    assert [{:c, 0}, {:a, 1}] == queue |> Q.to_list
     assert 2 == queue |> Q.size
   end
 
@@ -21,42 +21,42 @@ defmodule Queuex.Backends.ListTest do
     queue = Q.new
     assert {nil, ^queue} = queue |> Q.pop
 
-    queue = queue |> Q.push(1, :a)
-    assert {{1, :a}, new_queue} = queue |> Q.pop
+    queue = queue |> Q.push(:a, 1)
+    assert {{:a, 1}, new_queue} = queue |> Q.pop
     assert [] == new_queue |> Q.to_list
     assert 0 = new_queue |> Q.size
 
-    queue = queue |> Q.push(2, :b)
-    assert {{1, :a}, new_queue} = queue |> Q.pop
-    assert [{2, :b}] == new_queue |> Q.to_list
+    queue = queue |> Q.push(:b, 2)
+    assert {{:a, 1}, new_queue} = queue |> Q.pop
+    assert [{:b, 2}] == new_queue |> Q.to_list
     assert 1 = new_queue |> Q.size
 
-    queue = queue |> Q.push(0, :c)
-    assert {{0, :c}, new_queue} = queue |> Q.pop
-    assert [{1, :a}, {2, :b}] == new_queue |> Q.to_list
+    queue = queue |> Q.push(:c, 0)
+    assert {{:c, 0}, new_queue} = queue |> Q.pop
+    assert [{:a, 1}, {:b, 2}] == new_queue |> Q.to_list
     assert 2 = new_queue |> Q.size
   end
 
   test "has_value? and has_priority_value?" do
-    queue = Q.new |> Q.push(1, :a) |> Q.push(2, :a)
-    assert true == queue |> Q.has_value?(:a)
+    queue = Q.new |> Q.push(:a, 1) |> Q.push(:a, 2)
+    assert true  == queue |> Q.has_value?(:a)
     assert false == queue |> Q.has_value?(:b)
 
-    assert true == queue |> Q.has_priority_value?(1, :a)
-    assert false == queue |> Q.has_priority_value?(3, :a)
-    assert false == queue |> Q.has_priority_value?(1, :b)
+    assert true  == queue |> Q.has_priority_value?(:a, 1)
+    assert false == queue |> Q.has_priority_value?(:a, 3)
+    assert false == queue |> Q.has_priority_value?(:b, 1)
   end
 
   test "order" do
     queue =
-      [ {1, :a}, {2, :b}, {2, :c}, {2, :d}, {3, :e}, {2, :f}, {2, :g}
-      ] |> Enum.reduce(Q.new, fn({p, v}, acc) -> acc |> Q.push(p, v) end)
-    {{1, :a}, queue} = queue |> Q.pop
-    {{2, :b}, queue} = queue |> Q.pop
-    {{2, :c}, queue} = queue |> Q.pop
-    {{2, :d}, queue} = queue |> Q.pop
-    {{2, :f}, queue} = queue |> Q.pop
-    {{2, :g}, queue} = queue |> Q.pop
-    {{3, :e}, []}    = queue |> Q.pop
+      [ {:a, 1}, {:b, 2}, {:c, 2}, {:d, 2}, {:e, 3}, {:f, 2}, {:g, 2}
+      ] |> Enum.reduce(Q.new, fn({v, p}, acc) -> acc |> Q.push(v, p) end)
+    {{:a, 1}, queue} = queue |> Q.pop
+    {{:b, 2}, queue} = queue |> Q.pop
+    {{:c, 2}, queue} = queue |> Q.pop
+    {{:d, 2}, queue} = queue |> Q.pop
+    {{:f, 2}, queue} = queue |> Q.pop
+    {{:g, 2}, queue} = queue |> Q.pop
+    {{:e, 3}, []}    = queue |> Q.pop
   end
 end

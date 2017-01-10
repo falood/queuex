@@ -14,12 +14,12 @@ defmodule Queuex.Backends.List do
   @doc """
   O(n)
   """
-  def push([], priority, value), do: [{priority, value}]
-  def push([{list_priority, _}=h | t], priority, value) do
+  def push([], value, priority), do: [{value, priority}]
+  def push([{_, list_priority}=h | t], value, priority) do
     if priority < list_priority do
-      [{priority, value}, h | t]
+      [{value, priority}, h | t]
     else
-      [h | push(t, priority, value)]
+      [h | push(t, value, priority)]
     end
   end
 
@@ -38,7 +38,7 @@ defmodule Queuex.Backends.List do
   O(n)
   """
   def has_value?([], _), do: false
-  def has_value?([{_, value} | _], value), do: true
+  def has_value?([{value, _} | _], value), do: true
   def has_value?([_ | t], value) do
     has_value?(t, value)
   end
@@ -47,8 +47,8 @@ defmodule Queuex.Backends.List do
   O(n)
   """
   def has_priority_value?([], _, _), do: false
-  def has_priority_value?([{priority, value} | _], priority, value), do: true
-  def has_priority_value?([_ | t], priority, value) do
-    has_priority_value?(t, priority, value)
+  def has_priority_value?([{value, priority} | _], value, priority), do: true
+  def has_priority_value?([_ | t], value, priority) do
+    has_priority_value?(t, value, priority)
   end
 end
