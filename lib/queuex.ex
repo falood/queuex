@@ -5,6 +5,8 @@ defmodule Queuex do
     backend          = opts |> Keyword.get(:backend, Queuex.Backends.List)
     unique           = opts |> Keyword.get(:unique, false)
     default_priority = opts |> Keyword.get(:default_priority, 1)
+    unique in [:strictly, true, false] || raise "unknown value"
+
     quote do
       @max_num          unquote(max_num)
       @worker           unquote(worker)

@@ -4,6 +4,7 @@
 * Enhancements
   * change params order for push/2
   * make priority as the second parameter of worker
+  * add new option `:strictly` for `unique`
 
 * Bugfix:
   * fix elixir v1.4.0 warning

@@ -24,23 +24,30 @@ defmodule Queuex.Worker do
     }
   end
 
-  def handle_cast({term, priority}, %__MODULE__{num: num, max_num: num, unique: true, queue: queue}=sd) do
-    queue =
-      if sd.backend.has_value?(queue, term) do
-        Logger.info "Queuex #{sd.module}: Repeated task ignored."
-        queue
-      else
-        queue |> sd.backend.push(term, priority)
-      end
-    {:noreply, %{sd | queue: queue}}
-  end
-
   def handle_cast({term, priority}, %__MODULE__{num: num, max_num: num, unique: false, queue: queue}=sd) do
     {:noreply, %{sd | queue: sd.backend.push(queue, term, priority)}}
   end
 
+  def handle_cast({term, priority}, %__MODULE__{num: num, max_num: num, queue: queue}=sd) do
+    queue =
+      case sd.unique do
+        true ->
+          sd.backend.has_value?(queue, term)
+        :strictly ->
+          sd.backend.has_priority_value?(queue, term, priority)
+      end
+      |> case do
+        true ->
+            queue |> sd.backend.push(term, priority)
+        false ->
+          Logger.info "Queuex #{sd.module}: Repeated task ignored."
+          queue
+      end
+    {:noreply, %{sd | queue: queue}}
+  end
+
   def handle_cast({term, priority}, %__MODULE__{num: num}=sd) do
-    {sd.pid, sd.module} |> new_worker |> send(term, priority)
+    {sd.pid, sd.module} |> new_worker |> send({term, priority})
     {:noreply, %{sd | num: num + 1}}
   end
 
