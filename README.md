@@ -39,7 +39,7 @@ end
     3. push term to queue
 
 ```elixir
-MyQueue.push(priority, term)
+MyQueue.push(term, priority)
 MyQueue.push(term) # push term with default priority
 ```
 
