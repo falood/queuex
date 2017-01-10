@@ -28,7 +28,7 @@ defmodule Queuex.Backends.RedBlackTree do
   The origin version of this module is forked from https://github.com/SenecaSystems/red_black_tree.
   """
 
-  @behaviour Queuex.Backends
+  @behaviour Queuex.Backend
 
   defstruct root: nil, size: 0
 

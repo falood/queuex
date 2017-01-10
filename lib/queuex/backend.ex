@@ -1,4 +1,4 @@
-defmodule Queuex.Backends do
+defmodule Queuex.Backend do
 
   @type queue :: term
   @type priority :: term

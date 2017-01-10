@@ -1,5 +1,5 @@
 defmodule Queuex.Backends.List do
-  @behaviour Queuex.Backends
+  @behaviour Queuex.Backend
 
   @doc """
   O(1)
