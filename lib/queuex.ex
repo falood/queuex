@@ -22,7 +22,7 @@ defmodule Queuex do
       end
 
       def start_link do
-        func = fn -> receive do x -> apply __MODULE__, @worker, [x] end end
+        func = fn -> receive do {term, priority} -> apply __MODULE__, @worker, [term, priority] end end
         {:ok, :proc_lib.spawn_link(func)}
       end
 

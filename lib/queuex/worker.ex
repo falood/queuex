@@ -39,8 +39,8 @@ defmodule Queuex.Worker do
     {:noreply, %{sd | queue: sd.backend.push(queue, term, priority)}}
   end
 
-  def handle_cast({term, _priority}, %__MODULE__{num: num}=sd) do
-    {sd.pid, sd.module} |> new_worker |> send(term)
+  def handle_cast({term, priority}, %__MODULE__{num: num}=sd) do
+    {sd.pid, sd.module} |> new_worker |> send(term, priority)
     {:noreply, %{sd | num: num + 1}}
   end
 

@@ -3,6 +3,7 @@
 ## v0.3-dev
 * Enhancements
   * change params order for push/2
+  * make priority as the second parameter of worker
 
 * Bugfix:
   * fix elixir v1.4.0 warning

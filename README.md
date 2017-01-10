@@ -21,7 +21,7 @@ These backends are supported:
 defmodule MyQueue do
   use Queuex, max_num: 3, worker: :my_worker
 
-  def my_worker(term) do
+  def my_worker(term, _priority) do
     :timer.sleep(10000)
     term |> IO.inspect
   end
