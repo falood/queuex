@@ -3,7 +3,7 @@ alias Queuex.Backends.RedBlackTree.Node
 
 defmodule Queuex.Backends.RedBlackTree.Node do
   @moduledoc """
-  The origin version of this module module is forked from https://github.com/SenecaSystems/red_black_tree.
+  The origin version of this module is forked from https://github.com/SenecaSystems/red_black_tree.
   """
   defstruct(
     color: :black,
@@ -25,7 +25,7 @@ end
 
 defmodule Queuex.Backends.RedBlackTree do
   @moduledoc """
-  The origin version of this module module is forked from https://github.com/SenecaSystems/red_black_tree.
+  The origin version of this module is forked from https://github.com/SenecaSystems/red_black_tree.
   """
 
   @behaviour Queuex.Backends
